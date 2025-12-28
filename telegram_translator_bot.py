@@ -2,22 +2,30 @@ import os
 import logging
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes
-from openai import OpenAI
+from openai import AzureOpenAI
+from dotenv import load_dotenv
+
+load_dotenv()
 
 TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_TR_BOT_TOKEN")
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-OPENAI_BASE_URL = os.environ.get("OPENAI_BASE_URL")
+AZURE_OPENAI_API_KEY = os.environ.get("AZURE_OPENAI_API_KEY")
+AZURE_OPENAI_ENDPOINT = os.environ.get("AZURE_OPENAI_ENDPOINT")
+AZURE_OPENAI_API_VERSION = os.environ.get("AZURE_OPENAI_API_VERSION")
 
 if not TELEGRAM_BOT_TOKEN:
     raise RuntimeError("TELEGRAM_TR_BOT_TOKEN not set")
-if not OPENAI_API_KEY:
-    raise RuntimeError("OPENAI_API_KEY not set")
-if not OPENAI_BASE_URL:
-    raise RuntimeError("OPENAI_BASE_URL not set")
+if not AZURE_OPENAI_API_KEY:
+    raise RuntimeError("AZURE_OPENAI_API_KEY not set")
+if not AZURE_OPENAI_ENDPOINT:
+    raise RuntimeError("AZURE_OPENAI_ENDPOINT not set")
+if not AZURE_OPENAI_API_VERSION:
+    raise RuntimeError("AZURE_OPENAI_API_VERSION not set")
 
-client = OpenAI(
-    api_key=OPENAI_API_KEY,
-    base_url=OPENAI_BASE_URL,
+#  USE AzureOpenAI
+client = AzureOpenAI(
+    api_key=AZURE_OPENAI_API_KEY,
+    azure_endpoint=AZURE_OPENAI_ENDPOINT,
+    api_version=AZURE_OPENAI_API_VERSION,
 )
 
 MODEL = "gpt-4.1"
@@ -48,6 +56,7 @@ def translate_to_persian(text: str) -> str:
             max_tokens=1000,
         )
         return response.choices[0].message.content.strip()
+
     except Exception as e:
         logger.error(e)
         return "Error in translation"
@@ -55,29 +64,26 @@ def translate_to_persian(text: str) -> str:
 
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "Send any English text.\n"
-        "I will translate it to Persian."
+        "Send any English text.\nI will translate it to Persian."
     )
 
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "Usage:\n"
-        "Send any English text.\n"
-        "Max length: 4000 characters."
+        "Usage:\nSend any English text.\nMax length: 4000 characters."
     )
 
 
 async def about_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
-        "English to Persian translation bot.\n"
-        "Powered by GPT-4.1."
+        "English to Persian translation bot.\nPowered by GPT-4.1."
     )
 
 
 async def translate_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     text = update.message.text
-    if not text or len(text.strip()) == 0:
+
+    if not text or not text.strip():
         await update.message.reply_text("Empty message.")
         return
 
