@@ -23,9 +23,15 @@ A simple Telegram bot that translates English text into **informal, natural Pers
 
 ---
 
-## Set the [.env.local]
-
 ## Installation
 
 ```bash
 pip install python-telegram-bot python-dotenv openai
+
+Set the .env like this:
+
+AZURE_OPENAI_API_KEY=your_api_key_here
+AZURE_OPENAI_ENDPOINT=https://your-resource-name.openai.azure.com/
+AZURE_OPENAI_DEPLOYMENT=gpt-4.1
+AZURE_OPENAI_API_VERSION=2025-04-01-preview
+TELEGRAM_TR_BOT_TOKEN=your_telegram_bot_key_here
