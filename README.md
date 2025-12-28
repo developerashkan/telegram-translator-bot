@@ -1,24 +1,31 @@
 # English to Persian Translation Bot
 
-A Telegram bot that translates English text to informal Persian using **OpenAI GPT-4.1**.
+A simple Telegram bot that translates English text into **informal, natural Persian** using **Azure OpenAI GPT-4.1**.
 
 ---
 
 ## Features
 
-- Translate English text to **informal, natural Persian**.  
-- No emojis, symbols, or English in the output.  
-- Instant responses via Telegram messages.  
-- Commands supported:
-  - `/start` – Welcome message  
-  - `/help` – Usage instructions  
-  - `/about` – Info about the bot  
+- English → informal Persian translation  
+- No emojis, symbols, or English in output  
+- Telegram commands: `/start`, `/help`, `/about`  
+- Max message length: 4000 characters  
 
 ---
 
-## Requirements
+## Tech Stack
 
-- Python 3.10+  
-- Packages:
-  ```bash
-  pip install python-telegram-bot==20.5 openai
+- Python 3.10+
+- Telegram Bot API
+- Azure OpenAI (GPT-4.1)
+- python-telegram-bot
+- python-dotenv
+
+---
+
+## Set the [.env.local]
+
+## Installation
+
+```bash
+pip install python-telegram-bot python-dotenv openai
